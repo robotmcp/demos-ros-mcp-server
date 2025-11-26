@@ -1,2 +1,5 @@
-# demos-ros-mcp-server
-Demos and tutorials on connecting AI LLMs to Robots using https://github.com/robotmcp/ros-mcp-server
+# ROS MCP Server Demos
+This repository is a collection of demos and tutorials on connecting AI LLMs to Robots using https://github.com/robotmcp/ros-mcp-server
+
+# In this Repository
+Each sub-folder in this repository can be treated as a standalone project with its own readme and pyproject.toml file. Below is a list of demos along with a brief description of each.
