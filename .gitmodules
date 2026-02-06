@@ -1,0 +1,5 @@
+[submodule "unitree-go2-ros2/"]
+	url = https://github.com/itsbharatj/unitree-go2-ros2-rosbridge.git
+[submodule "2_UnitreeGo2_simulation/src/unitree-go2-ros2-rosbridge"]
+	path = 2_UnitreeGo2_simulation/src/unitree-go2-ros2-rosbridge
+	url = https://github.com/itsbharatj/unitree-go2-ros2-rosbridge
