@@ -1,0 +1,16 @@
+# Request
+geometry_msgs/Point[] points
+float32 speed
+float32 tolerance
+
+
+bool fly_through
+
+---
+# Result
+bool success
+string message
+---
+# Feedback
+int32 current_point_index
+float32 distance_remaining
