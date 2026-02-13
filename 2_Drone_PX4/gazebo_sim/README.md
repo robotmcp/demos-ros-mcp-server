@@ -22,6 +22,9 @@ Before starting, ensure you have the following installed:
 - **PX4 Autopilot**: (See Quick Start)
 - **QGroundControl**: (See Quick Start)
 
+### Configure Robot Specification
+Copy the `drone_px4.yaml` file to the `robot_specification` folder of the `ros-mcp-server`.
+
 ## Quick Start
 
 ### 1. Install PX4 Autopilot
