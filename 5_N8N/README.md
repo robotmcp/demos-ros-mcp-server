@@ -1,6 +1,6 @@
 # Example 5: ROS-MCP Server with n8n workflows
 
-This repository contains practical demo workflows showing how to integrate **ROS-MCP Server** with **n8n** which is a no-code/low-code automation tool.
+This example contains practical demo workflows showing how to integrate **ROS-MCP Server** with **n8n** which is a no-code/low-code automation tool.
 
 These demos enable remote control, monitoring, and voice/text interaction with ROS-based robots (real hardware or simulation like Gazebo/turtlesim) using natural language and AI agents.
 
