@@ -1,0 +1,596 @@
+{
+  "name": "ROS-MCP (Telegram Bot)",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger').item.json.message.text ?? $('Transcribe a recording').item.json.text }}",
+        "options": {
+          "systemMessage": "You are an intelligent ROS2 robot operator agent. You help users monitor, control, and interact with a ROS2-based robot system through natural language. You have access to a ROS-MCP server which acts as a bridge between you and the robot's ROS2 middleware.\n\n## Communication Architecture\nYou communicate with the robot through the following chain:\nUser → n8n AI Agent (you) → ROS-MCP Server (via MCP over HTTP/SSE) → Rosbridge WebSocket (port 9090) → ROS2\n\nThis means every action you take has real-world consequences on a physical or simulated robot. Always be deliberate and confirm before executing irreversible or potentially unsafe commands.\n\n## Connection Protocol\nAt the start of every new conversation, you MUST connect to the robot before doing anything else. Use the following defaults unless the user specifies otherwise:\n- Robot IP: 127.0.0.1\n- Port: 9090\n- ping_timeout: 2\n- port_timeout: 2\n\nDo not ask the user for these details. Connect automatically and silently. Only report back if the connection fails.\n\n## Your Capabilities\nYou can perform the following through MCP tools:\n- Connect and disconnect from the robot\n- List all active ROS2 topics, nodes, and services\n- Subscribe to and read data from topics\n- Publish messages to topics\n- Call ROS2 services\n- Send navigation goals\n- Inspect message types and topic structures\n- Detect the ROS version\n\n## Behavioral Guidelines\n\n1. Always connect first. Never attempt to call any other MCP tool before a successful connection is established.\n\n2. Be concise but informative. When reporting topic data or node lists, summarize intelligently rather than dumping raw output. A user asking \"what is the robot doing?\" wants a human-readable answer, not a raw JSON blob.\n\n3. You are free to execute commands based on your understanding of the command from the user, no need to keep taking users permissions please. \n\n4. Handle errors gracefully. If a tool call fails (e.g. a service doesn't exist, a topic has no publishers), explain what went wrong in plain English and suggest what might be missing or how to fix it. Never just repeat the raw error message.\n\n5. Remember context within the conversation. If the user already asked you to connect or already told you the robot's IP, do not ask again. Maintain state throughout the conversation.\n\n6. Be honest about limitations. You cannot directly access camera feeds, play audio, or interact with hardware outside of what ROS2 topics and services expose. If a user asks for something outside your capabilities, say so clearly.\n\n7. Default to read-only when uncertain. If you are unsure whether a command is safe, prefer subscribing to a topic and reporting back rather than publishing to it.\n\n## ROS2 Reminders\n- Topic names always start with /\n- Message types follow the format package/msg/TypeName (e.g. geometry_msgs/msg/Twist)\n- Service types follow the format package/srv/TypeName\n- The turtlesim simulation is currently running, so /turtle1/cmd_vel, /turtle1/pose, and related topics are active\n- Rosbridge acts as the WebSocket gateway — if it is down, no MCP tools will work\n\n## Tone\nBe helpful, direct, and professional. You are operating real robotics infrastructure. Avoid unnecessary filler phrases. When the user asks a question, answer it. When they give a command, execute it (after confirming if needed).",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        592,
+        16
+      ],
+      "id": "3a0589d8-8990-4c72-b0bc-8efcd6ffbc27",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://prosy-unwildly-estelle.ngrok-free.dev/mcp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        304
+      ],
+      "id": "d026bc31-586c-459d-9e31-68698604fd52",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "o3-mini",
+          "mode": "list",
+          "cachedResultName": "o3-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        304
+      ],
+      "id": "c2a902de-aa41-45a1-a3d3-cf9f66e31687",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SsLaWr54Ulh8PL10",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1328,
+        192
+      ],
+      "id": "401ffc81-fbb5-4771-a6e2-38d1c3f19548",
+      "name": "Telegram Trigger",
+      "webhookId": "93905ca9-2480-4ed5-a9e6-299353136d3e",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        32
+      ],
+      "id": "0516c2e5-6e33-458a-89cc-b810a995562d",
+      "name": "Send a text message",
+      "webhookId": "b4f207f0-7504-4258-957e-fcf872452527",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "61aeabe1-1b44-4b45-84bb-ffa1786dfa5e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "3f34f1a9-919c-4a90-928d-e03cc4908584",
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c38e0ea3-c6fe-49e6-a37e-cca2b2bbd066",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "None"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1008,
+        176
+      ],
+      "id": "d86dbbec-a863-47c5-845f-18aaeb5f6c38",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        240
+      ],
+      "id": "5f25750c-d24a-4a87-af01-e08dcdc628d2",
+      "name": "Get a file",
+      "webhookId": "172539ca-2ab9-47fd-80d7-0b4c5fe1fa2b",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        480
+      ],
+      "id": "4873e62d-41fe-45f6-ad45-fdb5cc26668a",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "SsLaWr54Ulh8PL10",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Transcribed Audio:  {{ $json.text }}\nContinue with it?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        480
+      ],
+      "id": "51fb887d-bcf9-469c-82bd-4b1744ad3ca4",
+      "name": "Send a text message1",
+      "webhookId": "3f3a71c8-7171-424a-bfe6-1a2f07bdffb8",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $json.result.chat.id }}",
+        "message": "Continue?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Yes, Continue ✅",
+            "disapproveLabel": "No, I wish to change ❌"
+          }
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        480
+      ],
+      "id": "39fe10d7-ef01-4017-88a2-03668f9e87cf",
+      "name": "Send message and wait for response",
+      "webhookId": "b5dda6c8-88a1-421b-ae8a-3e4b82ca0cde",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.approved }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "76f588ba-8512-4145-b4ba-46ddb14ceacd"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Go Ahead"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8d8eaaf3-4fd3-4c2b-886a-e3e1a4771598",
+                    "leftValue": "={{ $json.data.approved }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Start Over"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        480
+      ],
+      "id": "45b94ee3-4a4f-468a-8fca-1d4c7c8dd333",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Great, proceeding with the workflow!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        208
+      ],
+      "id": "dcd3d484-f85d-4acd-9081-01307b39e139",
+      "name": "Send a text message2",
+      "webhookId": "58147724-aa1f-480b-b28b-0cdb74670557",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Please run your message again",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        592
+      ],
+      "id": "04273578-810e-4662-8a93-d95a3b824bd7",
+      "name": "Send a text message3",
+      "webhookId": "70f9e9ae-2f30-49db-b64d-09746110dd05",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Invalid input, please try only using text or voice commands",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        656
+      ],
+      "id": "601b3e8e-e3fa-4cb5-b526-33afae7d693e",
+      "name": "Send a text message4",
+      "webhookId": "a1319c68-6e5e-4ac0-95a8-15db8131472c",
+      "credentials": {
+        "telegramApi": {
+          "id": "e3aw23s3wfNLRp4X",
+          "name": "ROS-MCP Server bot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "4ae07dbf-d348-4c20-8409-2c52992e10c5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff41c0a34092cceb09f82361dd22e860976ddce107e3e9b101b34408da942ae4"
+  },
+  "id": "1SvzXZaJVazY3Loi",
+  "tags": []
+}

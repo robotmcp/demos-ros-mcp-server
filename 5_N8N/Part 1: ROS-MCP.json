@@ -1,0 +1,124 @@
+{
+  "name": "ROS-MCP",
+  "nodes": [
+    {
+      "parameters": {
+        "availableInChat": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -432,
+        -16
+      ],
+      "id": "f9f22384-c201-437b-83e1-91fb0989ead5",
+      "name": "When chat message received",
+      "webhookId": "3f23a097-19ca-4bb8-adb9-2d71f7542352"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "17b19ccc-3056-4109-ae12-5c157054553d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://prosy-unwildly-estelle.ngrok-free.dev/mcp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        208
+      ],
+      "id": "b6fbbaef-9169-4459-9df5-6ef9a70974c4",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "o3-mini",
+          "mode": "list",
+          "cachedResultName": "o3-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        208
+      ],
+      "id": "2aebb9c1-6842-4f1b-8bc8-42304783a063",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SsLaWr54Ulh8PL10",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a5f3ee5d-d327-44e6-a9d8-e8fce3c9bdd5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff41c0a34092cceb09f82361dd22e860976ddce107e3e9b101b34408da942ae4"
+  },
+  "id": "gHKsxMFXd9LPCXV1",
+  "tags": []
+}
