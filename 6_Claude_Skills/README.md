@@ -12,6 +12,10 @@ This example demonstrates how to use **Claude Code Skills** with the **ROS-MCP S
 | Part 1: ROS-MCP Skill | [YouTube - Part 1](https://youtu.be/WX8H3orJglo) |
 | Part 2: Sub-Skills (Gazebo) | [YouTube - Part 2](https://youtu.be/__hTRRwC0P0) |
 
+## No Manual Setup Required
+
+You don't need to manually install the ROS-MCP Server — the skill includes an [installation reference](ros-mcp-skill/reference/installation.md) and will guide Claude Code through setup automatically if it's not already configured.
+
 ## Why Skills?
 
 ### The Problem
@@ -92,26 +96,14 @@ The main `ros-mcp-skill` provides Claude Code with complete knowledge of the ROS
 
 ### Installation
 
-1. Copy the `ros-mcp-skill/` directory into your Claude Code skills folder:
+Copy the `ros-mcp-skill/` directory into your Claude Code skills folder:
 
 ```bash
 mkdir -p ~/.claude/skills
 cp -r ros-mcp-skill ~/.claude/skills/
 ```
 
-2. Ensure the ROS-MCP Server is configured as an MCP server in Claude Code:
-
-```bash
-# If installed via pip
-claude mcp add-json "ros-mcp-server" '{"command":"ros-mcp","args":[]}'
-```
-
-3. Start rosbridge on your robot or simulation machine:
-
-```bash
-source /opt/ros/$ROS_DISTRO/setup.bash
-ros2 launch rosbridge_server rosbridge_websocket_launch.xml
-```
+That's it — the skill will guide Claude Code through installing and configuring the ROS-MCP Server if needed.
 
 ### How It Works
 
@@ -250,8 +242,9 @@ To create a new sub-skill:
 
 - [ROS 2](https://docs.ros.org/en/humble/Installation.html) (Humble/Iron/Jazzy)
 - [rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite) (`sudo apt install ros-$ROS_DISTRO-rosbridge-server`)
-- [ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) (`pip install ros-mcp-server`)
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
+
+> **Note:** You do **not** need to manually install the [ros-mcp-server](https://github.com/robotmcp/ros-mcp-server). The skill includes an [installation reference](ros-mcp-skill/reference/installation.md) and will guide Claude Code through the setup automatically if it is not already configured.
 
 For the Gazebo sub-skill demo:
 - Ignition Gazebo Fortress (`sudo apt install ros-$ROS_DISTRO-ros-gz`)
