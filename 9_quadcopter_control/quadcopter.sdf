@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!--
-  Helicopter (rotorcraft) demo world for the ROS-MCP Server demos.
+  Quadcopter demo world for the ROS-MCP Server demos.
 
   Uses the X3 multirotor model from Ignition Fortress's built-in
   multicopter_velocity_control demo, rewired for a single aircraft with
@@ -13,10 +13,10 @@
     /model/X3/pose                  (ignition.msgs.Pose_V)    — TF
     /clock                          (ignition.msgs.Clock)
 
-  These are remapped to /helicopter/... in ROS 2 by the launch file.
+  These are remapped to /quadcopter/... in ROS 2 by the launch file.
 -->
 <sdf version="1.6">
-  <world name="helicopter_world">
+  <world name="quadcopter_world">
     <physics name="4ms" type="ignored">
       <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>

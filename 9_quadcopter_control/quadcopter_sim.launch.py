@@ -10,10 +10,10 @@ from launch import LaunchDescription
 
 
 def generate_launch_description():
-    """Ignition Gazebo + ros_gz_bridge + rosbridge + rosapi for helicopter demo."""
+    """Ignition Gazebo + ros_gz_bridge + rosbridge + rosapi for quadcopter demo."""
 
     world_arg = DeclareLaunchArgument(
-        "world", default_value="helicopter_minimal.sdf",
+        "world", default_value="quadcopter_minimal.sdf",
         description="SDF world file in this example directory"
     )
     world_file = PathJoinSubstitution([ThisLaunchFileDir(), LaunchConfiguration("world")])
@@ -34,9 +34,9 @@ def generate_launch_description():
             '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
         ],
         remappings=[
-            ('/X3/gazebo/command/twist', '/helicopter/cmd_vel'),
-            ('/X3/enable',               '/helicopter/enable'),
-            ('/model/x3/odometry',       '/helicopter/odom'),
+            ('/X3/gazebo/command/twist', '/quadcopter/cmd_vel'),
+            ('/X3/enable',               '/quadcopter/enable'),
+            ('/model/x3/odometry',       '/quadcopter/odom'),
             ('/model/x3/pose',           '/tf'),
         ],
         output='screen'
