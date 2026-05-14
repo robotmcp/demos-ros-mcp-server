@@ -1,0 +1,22 @@
+[project]
+name = "10-helicopter-control"
+version = "0.1.0"
+description = "Helicopter (rotorcraft) control in Ignition Gazebo Fortress via the ROS-MCP Server"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [
+    { name = "Bharat Jain"}
+]
+
+dependencies = [
+    "fastmcp>=2.11.3",
+    "jsonschema>=4.25.1",
+    "mcp[cli]>=1.13.0",
+    "opencv-python>=4.11.0.86",
+    "pillow>=11.3.0",
+    "websocket-client>=1.8.0",
+    "pymongo",
+    "tornado",
+    "netifaces",
+]
