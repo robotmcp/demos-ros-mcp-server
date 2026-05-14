@@ -1,6 +1,6 @@
 # Example 10: Helicopter (Rotorcraft) Control in Gazebo
 
-This example demonstrates how to fly a **rotorcraft** inside **Ignition Gazebo Fortress** from natural-language prompts routed through the **ROS-MCP Server**.
+This example demonstrates how to fly a **rotorcraft** inside **Ignition Gazebo Fortress** from natural-language prompts routed through the **ROS-MCP Server**. The default world is a clean minimal space with the X3 rotorcraft, a flat floor, and a red marker cube for orientation.
 
 Takeoff, hover, directional flight, and landing are all driven from the MCP client → `rosbridge` → `ros_gz_bridge` → Ignition's `MulticopterVelocityControl` plugin.
 
@@ -44,11 +44,17 @@ source .venv/bin/activate
 ros2 launch helicopter_sim.launch.py
 ```
 
+This loads `helicopter_minimal.sdf` by default. To launch the larger/scenic world instead:
+
+```bash
+ros2 launch helicopter_sim.launch.py world:=helicopter.sdf
+```
+
 This starts four processes:
 
 | Process            | What it does                                                       |
 | ------------------ | ------------------------------------------------------------------ |
-| `ign gazebo`       | Ignition Fortress loading `helicopter.sdf` (X3 + velocity control) |
+| `ign gazebo`       | Ignition Fortress loading `helicopter_minimal.sdf` (X3 + velocity control) |
 | `parameter_bridge` | Bridges Ignition ↔ ROS 2 topics (see topic map below)              |
 | `rosbridge_server` | WebSocket on `ws://localhost:9090` — the MCP transport             |
 | `rosapi`           | Lets MCP introspect topics / services                              |
@@ -119,7 +125,8 @@ Expected: `z` rises by roughly `commanded_z_velocity × seconds_commanded`.
 
 ```
 10_helicopter_control/
-├── helicopter.sdf              # World: ground plane + X3 with motor-model and velocity-control plugins
+├── helicopter_minimal.sdf      # Default clean world: floor + red marker + X3 controls
+├── helicopter.sdf              # Larger world: Baylands/fallback ground + X3 controls
 ├── helicopter_sim.launch.py    # Starts gazebo + bridge + rosbridge + rosapi
 ├── pyproject.toml              # uv/pip dependencies for the MCP side
 └── README.md
@@ -127,7 +134,7 @@ Expected: `z` rises by roughly `commanded_z_velocity × seconds_commanded`.
 
 ## 🔧 Tuning notes
 
-The velocity controller gains in `helicopter.sdf` come from the upstream Fortress demo and are conservative. If the helicopter feels sluggish or oscillates, tune these in the `MulticopterVelocityControl` plugin block:
+The velocity controller gains in the SDF worlds come from the upstream Fortress demo and are conservative. If the helicopter feels sluggish or oscillates, tune these in the `MulticopterVelocityControl` plugin block:
 
 ```xml
 <velocityGain>2.7 2.7 2.7</velocityGain>

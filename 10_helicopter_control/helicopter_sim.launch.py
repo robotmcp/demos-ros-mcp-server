@@ -1,7 +1,9 @@
-import os
-
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import (
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    ThisLaunchFileDir,
+)
 from launch_ros.actions import Node
 
 from launch import LaunchDescription
@@ -10,9 +12,11 @@ from launch import LaunchDescription
 def generate_launch_description():
     """Ignition Gazebo + ros_gz_bridge + rosbridge + rosapi for helicopter demo."""
 
-    world_file = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), 'helicopter.sdf'
+    world_arg = DeclareLaunchArgument(
+        "world", default_value="helicopter_minimal.sdf",
+        description="SDF world file in this example directory"
     )
+    world_file = PathJoinSubstitution([ThisLaunchFileDir(), LaunchConfiguration("world")])
 
     gazebo_sim = ExecuteProcess(
         cmd=['ign', 'gazebo', '-r', world_file],
@@ -59,6 +63,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        world_arg,
         port_arg,
         gazebo_sim,
         bridge,
