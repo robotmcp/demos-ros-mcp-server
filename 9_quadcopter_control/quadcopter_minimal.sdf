@@ -94,11 +94,10 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/X3 UAV/4</uri>
       <pose>0 6 2.0 0 0 3.14159</pose>
-    </include>
 
-    <!-- Motor 0: Back right -->
-    <plugin filename="ignition-gazebo-multicopter-motor-model-system"
-            name="ignition::gazebo::systems::MulticopterMotorModel">
+      <!-- Motor 0: Back right -->
+      <plugin filename="ignition-gazebo-multicopter-motor-model-system"
+              name="gz::sim::systems::MulticopterMotorModel">
       <robotNamespace>X3</robotNamespace>
       <jointName>X3/rotor_0_joint</jointName>
       <linkName>X3/rotor_0</linkName>
@@ -115,15 +114,15 @@
       <motorSpeedPubTopic>motor_speed/0</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-    </plugin>
+      </plugin>
 
-    <!-- Motor 1: Front right -->
-    <plugin filename="ignition-gazebo-multicopter-motor-model-system"
-            name="ignition::gazebo::systems::MulticopterMotorModel">
+      <!-- Motor 1: Front right -->
+      <plugin filename="ignition-gazebo-multicopter-motor-model-system"
+              name="gz::sim::systems::MulticopterMotorModel">
       <robotNamespace>X3</robotNamespace>
       <jointName>X3/rotor_1_joint</jointName>
       <linkName>X3/rotor_1</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>800.0</maxRotVelocity>
@@ -136,11 +135,11 @@
       <motorSpeedPubTopic>motor_speed/1</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-    </plugin>
+      </plugin>
 
-    <!-- Motor 2: Back left -->
-    <plugin filename="ignition-gazebo-multicopter-motor-model-system"
-            name="ignition::gazebo::systems::MulticopterMotorModel">
+      <!-- Motor 2: Back left -->
+      <plugin filename="ignition-gazebo-multicopter-motor-model-system"
+              name="gz::sim::systems::MulticopterMotorModel">
       <robotNamespace>X3</robotNamespace>
       <jointName>X3/rotor_2_joint</jointName>
       <linkName>X3/rotor_2</linkName>
@@ -157,15 +156,15 @@
       <motorSpeedPubTopic>motor_speed/2</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-    </plugin>
+      </plugin>
 
-    <!-- Motor 3: Front left -->
-    <plugin filename="ignition-gazebo-multicopter-motor-model-system"
-            name="ignition::gazebo::systems::MulticopterMotorModel">
+      <!-- Motor 3: Front left -->
+      <plugin filename="ignition-gazebo-multicopter-motor-model-system"
+              name="gz::sim::systems::MulticopterMotorModel">
       <robotNamespace>X3</robotNamespace>
       <jointName>X3/rotor_3_joint</jointName>
       <linkName>X3/rotor_3</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>800.0</maxRotVelocity>
@@ -178,10 +177,10 @@
       <motorSpeedPubTopic>motor_speed/3</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-    </plugin>
+      </plugin>
 
-    <plugin filename="ignition-gazebo-multicopter-control-system"
-            name="ignition::gazebo::systems::MulticopterVelocityControl">
+      <plugin filename="ignition-gazebo-multicopter-control-system"
+              name="gz::sim::systems::MulticopterVelocityControl">
       <robotNamespace>X3</robotNamespace>
       <commandSubTopic>gazebo/command/twist</commandSubTopic>
       <enableSubTopic>enable</enableSubTopic>
@@ -200,36 +199,37 @@
         <rotor>
           <jointName>X3/rotor_0_joint</jointName>
           <forceConstant>8.54858e-06</forceConstant>
-          <momentConstant>1.36777e-07</momentConstant>
+          <momentConstant>0.016</momentConstant>
           <direction>1</direction>
         </rotor>
         <rotor>
           <jointName>X3/rotor_1_joint</jointName>
           <forceConstant>8.54858e-06</forceConstant>
-          <momentConstant>1.36777e-07</momentConstant>
-          <direction>-1</direction>
+          <momentConstant>0.016</momentConstant>
+          <direction>1</direction>
         </rotor>
         <rotor>
           <jointName>X3/rotor_2_joint</jointName>
           <forceConstant>8.54858e-06</forceConstant>
-          <momentConstant>1.36777e-07</momentConstant>
+          <momentConstant>0.016</momentConstant>
           <direction>-1</direction>
         </rotor>
         <rotor>
           <jointName>X3/rotor_3_joint</jointName>
           <forceConstant>8.54858e-06</forceConstant>
-          <momentConstant>1.36777e-07</momentConstant>
-          <direction>1</direction>
+          <momentConstant>0.016</momentConstant>
+          <direction>-1</direction>
         </rotor>
       </rotorConfiguration>
-    </plugin>
+      </plugin>
 
-    <plugin filename="ignition-gazebo-odometry-publisher-system"
-            name="ignition::gazebo::systems::OdometryPublisher">
+      <plugin filename="ignition-gazebo-odometry-publisher-system"
+              name="ignition::gazebo::systems::OdometryPublisher">
       <odom_frame>world</odom_frame>
       <robot_base_frame>X3/base_link</robot_base_frame>
       <dimensions>3</dimensions>
       <odom_topic>/model/x3/odometry</odom_topic>
-    </plugin>
+      </plugin>
+    </include>
   </world>
 </sdf>
