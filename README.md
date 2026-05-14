@@ -29,3 +29,13 @@ It leverages the **CHAMP** quadruple controller to manage complex gait and postu
 [Usage and Installation Video](https://youtu.be/6EQpNAicpiI)
 
 ---
+
+### 9. Helicopter (Rotorcraft) Control in Gazebo
+
+This example demonstrates how to control an **X3 rotorcraft** in **Ignition Gazebo Fortress** through the **ROS-MCP Server**. It includes a clean minimal world with a flat floor and marker cube, plus ROS 2 bridges for arming, velocity control, odometry, TF, and clock topics.
+
+[View Example 9](./9_helicopter_control/README.md)
+
+[Usage and Installation Video](https://youtu.be/buN6RT3Y99k)
+
+---

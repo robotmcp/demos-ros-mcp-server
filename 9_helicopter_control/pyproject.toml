@@ -1,5 +1,5 @@
 [project]
-name = "10-helicopter-control"
+name = "9-helicopter-control"
 version = "0.1.0"
 description = "Helicopter (rotorcraft) control in Ignition Gazebo Fortress via the ROS-MCP Server"
 readme = "README.md"

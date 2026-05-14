@@ -1,10 +1,12 @@
-# Example 10: Helicopter (Rotorcraft) Control in Gazebo
+# Example 9: Helicopter (Rotorcraft) Control in Gazebo
+
+[Usage and Installation Video](https://youtu.be/buN6RT3Y99k)
 
 This example demonstrates how to fly a **rotorcraft** inside **Ignition Gazebo Fortress** from natural-language prompts routed through the **ROS-MCP Server**. The default world is a clean minimal space with the X3 rotorcraft, a flat floor, and a red marker cube for orientation.
 
 Takeoff, hover, directional flight, and landing are all driven from the MCP client → `rosbridge` → `ros_gz_bridge` → Ignition's `MulticopterVelocityControl` plugin.
 
-> **Note on the name.** The craft used here is the **X3 quadrotor** from Gazebo Fuel (the same model as the built-in `multicopter_velocity_control` demo). The `10_helicopter_control` name uses *helicopter* in the broader rotorcraft sense. There is no dedicated single-main-rotor helicopter model in the open Gazebo Fortress ecosystem — ArduPilot's traditional-heli SITL frame needs a separate SITL build and is out of scope for this demo. The control surface (`cmd_vel`, `enable`) is identical to what you would use for any rotorcraft.
+> **Note on the name.** The craft used here is the **X3 quadrotor** from Gazebo Fuel (the same model as the built-in `multicopter_velocity_control` demo). The `9_helicopter_control` name uses *helicopter* in the broader rotorcraft sense. There is no dedicated single-main-rotor helicopter model in the open Gazebo Fortress ecosystem — ArduPilot's traditional-heli SITL frame needs a separate SITL build and is out of scope for this demo. The control surface (`cmd_vel`, `enable`) is identical to what you would use for any rotorcraft.
 
 ## 📋 Tested On
 
@@ -27,7 +29,7 @@ The first time you launch the world, Gazebo downloads the X3 model from [Fuel](h
 ## 📦 Installation
 
 ```bash
-cd 10_helicopter_control
+cd 9_helicopter_control
 uv venv
 source .venv/bin/activate
 uv sync
@@ -124,7 +126,7 @@ Expected: `z` rises by roughly `commanded_z_velocity × seconds_commanded`.
 ## 📁 Files
 
 ```
-10_helicopter_control/
+9_helicopter_control/
 ├── helicopter_minimal.sdf      # Default clean world: floor + red marker + X3 controls
 ├── helicopter.sdf              # Larger world: Baylands/fallback ground + X3 controls
 ├── helicopter_sim.launch.py    # Starts gazebo + bridge + rosbridge + rosapi
