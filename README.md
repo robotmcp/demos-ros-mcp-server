@@ -29,3 +29,15 @@ It leverages the **CHAMP** quadruple controller to manage complex gait and postu
 [Usage and Installation Video](https://youtu.be/6EQpNAicpiI)
 
 ---
+
+### 10. Semantic Navigation in a Living-Room Simulation
+
+This example demonstrates how to combine **Gazebo**, **SLAM Toolbox**, **Nav2**, semantic memory, and the **ROS-MCP Server** so a robot can explore a room, remember what it sees, and later navigate from natural-language requests such as “go near the plant.”
+
+[View Example 10](./10_semantic_navigation/README.md)
+
+[![Semantic Navigation tutorial and demo](https://img.youtube.com/vi/Cj4dYQ7BuUw/hqdefault.jpg)](https://youtu.be/Cj4dYQ7BuUw)
+
+[Usage and Installation Video](https://youtu.be/Cj4dYQ7BuUw)
+
+---

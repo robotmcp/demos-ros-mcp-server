@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+*.pyc
+data/semantic_memory.sqlite3
+data/semantic_images/*.jpg
