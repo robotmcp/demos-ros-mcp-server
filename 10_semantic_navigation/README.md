@@ -55,6 +55,9 @@ At runtime, Gazebo supplies robot sensors, SLAM builds the occupancy map, the fr
 ## Project layout
 
 ```text
+../.codex/skills/ros-object-navigation/
+└── SKILL.md
+
 10_semantic_navigation/
 ├── living_room_world.sdf
 ├── semantic_navigation.launch.py
@@ -77,6 +80,8 @@ At runtime, Gazebo supplies robot sensors, SLAM builds the occupancy map, the fr
 │   └── semantic_vector_store.py
 └── pyproject.toml
 ```
+
+The vendored Codex skill at `../.codex/skills/ros-object-navigation/SKILL.md` is the operational playbook used when an agent is asked to navigate to a named object. Keep it committed with this example so future runs use the same semantic-memory lookup, `/semantic_nav/go_to_object` request, Nav2 status checks, fallback goal pose, camera verification, and stop-handling sequence.
 
 ## Requirements
 
@@ -157,6 +162,30 @@ Navigate to a remembered object view:
 ```bash
 ros2 topic pub /semantic_nav/go_to_object std_msgs/msg/String \
   "{data: '{\"label\":\"plant\",\"match\":\"best\"}'}" --once
+```
+
+## Codex object-navigation skill
+
+This example includes the `ros-object-navigation` Codex skill in:
+
+```text
+../.codex/skills/ros-object-navigation/SKILL.md
+```
+
+Use this skill when asking Codex or another agent to drive the robot to a remembered object such as a plant, microwave, box, couch, or refrigerator. The skill binds the demo pieces together with this sequence:
+
+1. Query `data/semantic_memory.sqlite3` for the requested object and aliases.
+2. Publish the object request on `/semantic_nav/go_to_object`.
+3. Check `/navigate_to_pose` status and `/odom` before waiting.
+4. Fall back to a standoff `geometry_msgs/msg/PoseStamped` on `/goal_pose` if semantic navigation does not produce a reachable goal.
+5. Capture `/camera/image` only after the robot has stopped or reached the object view.
+6. Cancel, hold, or publish zero velocity if Nav2 is stuck.
+
+If the skill is not already installed in your local Codex home, refresh it from the vendored copy:
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R ../.codex/skills/ros-object-navigation ~/.codex/skills/
 ```
 
 ## ROS-MCP access
