@@ -29,3 +29,23 @@ It leverages the **CHAMP** quadruple controller to manage complex gait and postu
 [Usage and Installation Video](https://youtu.be/6EQpNAicpiI)
 
 ---
+
+### 3. PX4 Drone Control (Gazebo Sim & Real Robot)
+
+This example demonstrates how to control a **PX4-based drone** using the `ROS-MCP server` with custom ROS 2 Actions via **MAVROS**. It includes both a **Gazebo simulation** and a **real robot** setup. Using natural language, you can command takeoff, fly trajectory patterns, orbit, and return to launch.
+
+[View Example 3 - Gazebo Sim](./3_Drone_PX4/gazebo_sim/README.md) | [View Example 3 - Real Robot](./3_Drone_PX4/real_robot/README.md)
+
+[Sim Demo Video](https://www.youtube.com/watch?v=qVNO6Emfp_w) | [Real Robot Demo Video](https://www.youtube.com/watch?v=TRhr7QfWoTI)
+
+---
+
+### 4. TurtleBot3 Simulation in Ignition Gazebo
+
+This example demonstrates how to simulate a **TurtleBot3** robot in **Ignition Gazebo (Fortress)** with ROS 2. It supports multiple robot models (Burger, Waffle, Waffle Pi) and several pre-configured worlds. Using natural language and the `ROS-MCP server`, you can control the robot's movement, read sensor data (Lidar, IMU, Odometry), and inspect system state.
+
+[View Example 4](./4_turtlebot_ignition/README.md)
+
+[Usage and Installation Video](https://youtu.be/CXA4HDUVAnM)
+
+---
